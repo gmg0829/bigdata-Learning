@@ -12,6 +12,7 @@ import scala.Tuple2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,6 +44,7 @@ public class FunctionDemo {
         //过滤RDD数据集中包含result的表项，新建RDD数据集resultLines
         JavaRDD<String> resultLines=input.filter(
                 new Function<String, Boolean>() {
+                    @Override
                     public Boolean call(String v1)throws Exception {
                         return v1.contains("result");
                     }
@@ -53,14 +55,16 @@ public class FunctionDemo {
         //将文本行的单词过滤出来，并将所有的单词保存在RDD数据集words中。切分为单词，扁平化处理。见FlatMapFunction< T,R>
         JavaRDD<String> words=input.flatMap(
                 new FlatMapFunction<String, String>() {
-                    public Iterable<String> call(String s) throws Exception {
-                        return Arrays.asList(s.split(" "));
+                    @Override
+                    public Iterator<String> call(String s) {
+                        return Arrays.asList(s.split(" ,")).iterator();
                     }
                 }
         );
         //转化为键值对
         JavaPairRDD<String,Integer> counts=words.mapToPair(
                 new PairFunction<String, String, Integer>() {
+                    @Override
                     public Tuple2<String, Integer> call(String s) throws Exception {
                         return new Tuple2(s, 1);
                     }
@@ -70,6 +74,7 @@ public class FunctionDemo {
         //对每个词语进行计数
         JavaPairRDD <String,Integer> results=counts.reduceByKey(
                 new Function2<Integer, Integer, Integer>() {
+                    @Override
                     public Integer call(Integer v1, Integer v2) throws Exception {
                         return v1 + v2;
                     }
@@ -80,8 +85,9 @@ public class FunctionDemo {
         //将文本行的单词过滤出来，并将所有的单词保存在RDD数据集words中。
         JavaRDD<String> word=input.flatMap(
                 new FlatMapFunction<String, String>() {
-                    public Iterable<String> call(String s) throws Exception {
-                        return Arrays.asList(s.split(" "));
+                    @Override
+                    public Iterator<String> call(String s) {
+                        return Arrays.asList(s.split(",")).iterator();
                     }
                 }
         );
@@ -94,6 +100,7 @@ public class FunctionDemo {
         //转化为键值对
         JavaPairRDD<String,Integer> count=words.mapToPair(
                 new PairFunction<String, String, Integer>() {
+                    @Override
                     public Tuple2<String, Integer> call(String s) throws Exception {
                         return new Tuple2(s, 1);
                     }

@@ -9,6 +9,7 @@ import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author gmg
@@ -40,10 +41,11 @@ public class WordCount {
 
         JavaRDD<String> words = lines.flatMap((FlatMapFunction<String, String>) s -> {
             //分割
-            return Arrays.asList(s.split(" "));
+            return Arrays.asList(s.split(",")).iterator();
         });
 
-        JavaPairRDD<String, Integer> pairs = words.mapToPair((PairFunction<String, String, Integer>) word -> new Tuple2<>(word, 1));
+        JavaPairRDD<String, Integer> pairs = words.mapToPair((PairFunction<String, String, Integer>) word ->
+                new Tuple2<>(word, 1));
 
         JavaPairRDD<String, Integer> wordCounts = pairs.reduceByKey((Integer v1, Integer v2) -> {
             return v1 + v2;
