@@ -43,7 +43,6 @@ public class FunctionDemo {
         //过滤RDD数据集中包含result的表项，新建RDD数据集resultLines
         JavaRDD<String> resultLines=input.filter(
                 new Function<String, Boolean>() {
-                    @Override
                     public Boolean call(String v1)throws Exception {
                         return v1.contains("result");
                     }
@@ -54,7 +53,6 @@ public class FunctionDemo {
         //将文本行的单词过滤出来，并将所有的单词保存在RDD数据集words中。切分为单词，扁平化处理。见FlatMapFunction< T,R>
         JavaRDD<String> words=input.flatMap(
                 new FlatMapFunction<String, String>() {
-                    @Override
                     public Iterable<String> call(String s) throws Exception {
                         return Arrays.asList(s.split(" "));
                     }
@@ -63,7 +61,6 @@ public class FunctionDemo {
         //转化为键值对
         JavaPairRDD<String,Integer> counts=words.mapToPair(
                 new PairFunction<String, String, Integer>() {
-                    @Override
                     public Tuple2<String, Integer> call(String s) throws Exception {
                         return new Tuple2(s, 1);
                     }
@@ -83,7 +80,6 @@ public class FunctionDemo {
         //将文本行的单词过滤出来，并将所有的单词保存在RDD数据集words中。
         JavaRDD<String> word=input.flatMap(
                 new FlatMapFunction<String, String>() {
-                    @Override
                     public Iterable<String> call(String s) throws Exception {
                         return Arrays.asList(s.split(" "));
                     }
@@ -98,7 +94,6 @@ public class FunctionDemo {
         //转化为键值对
         JavaPairRDD<String,Integer> count=words.mapToPair(
                 new PairFunction<String, String, Integer>() {
-                    @Override
                     public Tuple2<String, Integer> call(String s) throws Exception {
                         return new Tuple2(s, 1);
                     }
