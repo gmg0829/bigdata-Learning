@@ -14,3 +14,16 @@ CREATE TABLE `acc_addr_count` (
   `remote_addr` varchar(255) DEFAULT NULL,
   `count` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+```$xslt
+/home/fantj/spark/bin/spark-submit \
+--class com.fantj.nginxlog.NginxLogCollect\
+--num-executors 1 \
+--driver-memory 100m \
+--executor-memory 100m \
+--executor-cores 3 \
+--files /home/fantj/hive/conf/hive-site.xml \
+--driver-class-path /home/fantj/hive/lib/mysql-connector-java-5.1.17.jar \
+/home/fantj/nginxlog.jar \
+```
